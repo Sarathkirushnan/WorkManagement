@@ -1,5 +1,5 @@
 package com.management.app.service.impl;
 
-public class WorkplaceJopServiceImpl {
+public class WorkplaceJobServiceImpl {
 
 }

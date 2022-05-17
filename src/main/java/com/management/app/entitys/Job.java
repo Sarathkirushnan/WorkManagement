@@ -10,10 +10,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "jop")
+@Table(name = "job")
 @Getter
 @Setter
-public class Jop extends DateAudit {
+public class Job extends DateAudit {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

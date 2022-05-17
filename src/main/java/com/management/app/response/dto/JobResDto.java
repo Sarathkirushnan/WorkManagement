@@ -1,11 +1,11 @@
-package com.management.app.request.dto;
+package com.management.app.response.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class JopRequestDto {
+public class JobResDto {
 	private Long id;
 	private String name;
 }
