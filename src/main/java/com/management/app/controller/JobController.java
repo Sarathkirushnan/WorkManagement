@@ -15,63 +15,63 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.management.app.entitys.Jop;
-import com.management.app.request.dto.JopRequestDto;
+import com.management.app.entitys.Job;
+import com.management.app.request.dto.JobRequestDto;
 import com.management.app.response.BaseResponse;
 import com.management.app.response.CommenResponse;
-import com.management.app.response.dto.JopResDto;
-import com.management.app.service.JopService;
+import com.management.app.response.dto.JobResDto;
+import com.management.app.service.JobService;
 
 @CrossOrigin
 @RestController
-public class JopController {
+public class JobController {
 	@Autowired
-	private JopService jopService;
+	private JobService jobService;
 
 	@PostMapping(value = "/api/v1/jop")
-	public ResponseEntity<BaseResponse> addJop(@RequestBody JopRequestDto jopRequestDto) {
-		if (jopService.existByName(jopRequestDto.getName())) {
+	public ResponseEntity<BaseResponse> addJop(@RequestBody JobRequestDto jobRequestDto) {
+		if (jobService.existByName(jobRequestDto.getName())) {
 			return ResponseEntity.ok(new BaseResponse("error", "This jop already exist"));
 		}
-		Jop jop = new Jop();
-		BeanUtils.copyProperties(jopRequestDto, jop,"id");
-		Jop savedJop = jopService.saveJop(jop);
+		Job job = new Job();
+		BeanUtils.copyProperties(jobRequestDto, job,"id");
+		Job savedJop = jobService.saveJop(job);
 		return ResponseEntity.ok(new BaseResponse("success", "jop saved successfully"));
 	}
 	
 	@PutMapping(value = "/api/v1/jop")
-	public ResponseEntity<BaseResponse> updateJop(@RequestBody JopRequestDto jopRequestDto) {
-		if (!jopService.existJop(jopRequestDto.getId())) {
+	public ResponseEntity<BaseResponse> updateJop(@RequestBody JobRequestDto jobRequestDto) {
+		if (!jobService.existJop(jobRequestDto.getId())) {
 			return ResponseEntity.ok(new BaseResponse("error", "This jop not exist"));
 		}
-		if (jopService.updateExistByName(jopRequestDto.getId(),jopRequestDto.getName())) {
+		if (jobService.updateExistByName(jobRequestDto.getId(),jobRequestDto.getName())) {
 			return ResponseEntity.ok(new BaseResponse("error", "This jop already exist"));
 		}
-		Jop jop = new Jop();
-		BeanUtils.copyProperties(jopRequestDto, jop);
-		Jop savedJop = jopService.updateJop(jop);
+		Job job = new Job();
+		BeanUtils.copyProperties(jobRequestDto, job);
+		Job savedJop = jobService.updateJop(job);
 		return ResponseEntity.ok(new BaseResponse("success", "jop update successfully"));
 	}
 	
 	@GetMapping(value = "/api/v1/jop")
 	public ResponseEntity<BaseResponse> getJops() {
-		List<Jop> jops = jopService.getAllJop();
-		List<JopResDto> responseDtos = new ArrayList<>();
-		for (Jop jop : jops) {
-			JopResDto responseDto = new JopResDto();
-			BeanUtils.copyProperties(jop, responseDto);
+		List<Job> jobs = jobService.getAllJop();
+		List<JobResDto> responseDtos = new ArrayList<>();
+		for (Job job : jobs) {
+			JobResDto responseDto = new JobResDto();
+			BeanUtils.copyProperties(job, responseDto);
 			responseDtos.add(responseDto);
 		}
-		return ResponseEntity.ok(new CommenResponse<List<JopResDto>>("jops", responseDtos, "success",
+		return ResponseEntity.ok(new CommenResponse<List<JobResDto>>("jops", responseDtos, "success",
 				"jops get successfully"));
 	}
 	
 	@DeleteMapping(value = "/api/v1/jop/{id}")
 	public ResponseEntity<BaseResponse> deleteJop(@PathVariable Long id) {
-		if (!jopService.existJop(id)) {
+		if (!jobService.existJop(id)) {
 			return ResponseEntity.ok(new BaseResponse("error", "This jop not exist"));
 		}
-		jopService.deleteById(id);
+		jobService.deleteById(id);
 		return ResponseEntity.ok(new BaseResponse("success", "jop deleted successfully"));
 	}
 }

@@ -2,21 +2,21 @@ package com.management.app.service;
 
 import java.util.List;
 
-import com.management.app.entitys.Jop;
+import com.management.app.entitys.Job;
 
-public interface JopService {
+public interface JobService {
 
 	boolean existByName(String name);
 
-	Jop saveJop(Jop jop);
+	Job saveJop(Job job);
 
 	boolean existJop(Long id);
 
 	boolean updateExistByName(Long id, String name);
 
-	Jop updateJop(Jop jop);
+	Job updateJop(Job job);
 	
-	public List<Jop> getAllJop();
+	public List<Job> getAllJop();
 	
 	public void deleteById(Long id);
 

@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.management.app.utils.JopStatus;
+import com.management.app.utils.JobStatus;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +34,6 @@ public class WorkingDays extends DateAudit {
 	@JoinColumn(name = "employee_id", nullable = false)
 	private Employee employee;
 	@Enumerated(EnumType.STRING)
-	private JopStatus status;
+	private JobStatus status;
 
 }

@@ -24,6 +24,6 @@ public class WorkplaceJop extends DateAudit{
 	private Workplace workplace;
 	@ManyToOne
 	@JoinColumn(name = "jop_id", nullable = false)
-	private Jop jop;
+	private Job job;
 	private Double incomePerHours;
 }
