@@ -10,4 +10,6 @@ public interface JopRepository extends JpaRepository<Jop, Long> {
 
 	boolean existsByName(String name);
 
+	boolean existsByNameAndIdNot(String name, Long id);
+
 }
