@@ -1,5 +1,7 @@
 package com.management.app.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,4 +25,28 @@ public class JopServiceImpl implements JopService {
 		return jopRepository.save(jop);
 	}
 
+	@Transactional(readOnly = true)
+	public boolean existJop(Long id) {
+		return jopRepository.existsById(id);
+	}
+
+	@Transactional(readOnly = true)
+	public boolean updateExistByName(Long id, String name) {
+		return jopRepository.existsByNameAndIdNot(name,id);
+	}
+
+	@Transactional
+	public Jop updateJop(Jop jop) {
+		return jopRepository.save(jop);
+	}
+	
+	@Transactional(readOnly = true)
+	public List<Jop> getAllJop() {
+		return jopRepository.findAll();
+	}
+
+	@Transactional
+	public void deleteById(Long id) {
+		jopRepository.deleteById(id);
+	}
 }
