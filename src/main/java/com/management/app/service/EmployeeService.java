@@ -7,7 +7,7 @@ import com.management.app.entitys.Employee;
 
 public interface EmployeeService {
 
-	void saveEmployee(Employee employee);
+	Employee saveEmployee(Employee employee);
 
 	List<Employee> getAllEmployee();
 
@@ -24,5 +24,7 @@ public interface EmployeeService {
 	boolean existByUpdateEmail(Long id, String email);
 
 	boolean existByDevice(String device);
+
+	Optional<Employee> getByEmployeeEmail(String email);
 
 }

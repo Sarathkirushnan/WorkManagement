@@ -1,5 +1,7 @@
 package com.management.app.repositories;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -19,5 +21,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	boolean existsByDevice(String device);
 
 	Employee findByDevice(String device);
+
+	Optional<Employee> findByEmailIgnoreCase(String email);
 	
 }

@@ -15,4 +15,5 @@ public class EmployeeRequestDto {
 	private Gender gender;
 	private String address;
 	private String email;
+	private String country;
 }

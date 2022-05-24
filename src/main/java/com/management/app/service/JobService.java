@@ -3,21 +3,26 @@ package com.management.app.service;
 import java.util.List;
 
 import com.management.app.entitys.Job;
+import com.management.app.entitys.WorkplaceJob;
 
 public interface JobService {
 
 	boolean existByName(String name);
 
-	Job saveJop(Job job);
+	Job saveJob(Job job);
 
-	boolean existJop(Long id);
+	boolean existJob(Long id);
 
 	boolean updateExistByName(Long id, String name);
 
-	Job updateJop(Job job);
+	Job updateJob(Job job);
 	
-	public List<Job> getAllJop();
+	public List<Job> getAllJob();
 	
 	public void deleteById(Long id);
+
+	boolean existJobByName(String name);
+
+	List<WorkplaceJob> getJobsByCompanyId(Long id);
 
 }

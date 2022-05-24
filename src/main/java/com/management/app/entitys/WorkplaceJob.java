@@ -15,7 +15,7 @@ import lombok.Setter;
 @Table(name = "workplace_jop")
 @Getter
 @Setter
-public class WorkplaceJop extends DateAudit{
+public class WorkplaceJob extends DateAudit{
 	@Id
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
 	private Long id;
@@ -25,5 +25,4 @@ public class WorkplaceJop extends DateAudit{
 	@ManyToOne
 	@JoinColumn(name = "jop_id", nullable = false)
 	private Job job;
-	private Double incomePerHours;
 }

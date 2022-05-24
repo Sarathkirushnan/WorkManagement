@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.management.app.entitys.Job;
+import com.management.app.entitys.WorkplaceJob;
 import com.management.app.request.dto.JobRequestDto;
 import com.management.app.response.BaseResponse;
 import com.management.app.response.CommenResponse;
 import com.management.app.response.dto.JobResDto;
+import com.management.app.response.dto.JobTableResDto;
 import com.management.app.service.JobService;
 
 @CrossOrigin
@@ -28,50 +30,74 @@ public class JobController {
 	@Autowired
 	private JobService jobService;
 
-	@PostMapping(value = "/api/v1/jop")
-	public ResponseEntity<BaseResponse> addJop(@RequestBody JobRequestDto jobRequestDto) {
+	@PostMapping(value = "/api/v1/job")
+	public ResponseEntity<BaseResponse> addjob(@RequestBody JobRequestDto jobRequestDto) {
 		if (jobService.existByName(jobRequestDto.getName())) {
-			return ResponseEntity.ok(new BaseResponse("error", "This jop already exist"));
+			return ResponseEntity.badRequest().body(new BaseResponse("error", "This job already exist"));
 		}
 		Job job = new Job();
 		BeanUtils.copyProperties(jobRequestDto, job,"id");
-		Job savedJop = jobService.saveJop(job);
-		return ResponseEntity.ok(new BaseResponse("success", "jop saved successfully"));
+		Job savedjob = jobService.saveJob(job);
+		return ResponseEntity.ok(new BaseResponse("success", "job saved successfully"));
 	}
 	
-	@PutMapping(value = "/api/v1/jop")
-	public ResponseEntity<BaseResponse> updateJop(@RequestBody JobRequestDto jobRequestDto) {
-		if (!jobService.existJop(jobRequestDto.getId())) {
-			return ResponseEntity.ok(new BaseResponse("error", "This jop not exist"));
+	@PutMapping(value = "/api/v1/job")
+	public ResponseEntity<BaseResponse> updatejob(@RequestBody JobRequestDto jobRequestDto) {
+		if (!jobService.existJob(jobRequestDto.getId())) {
+			return ResponseEntity.badRequest().body(new BaseResponse("error", "This job not exist"));
 		}
 		if (jobService.updateExistByName(jobRequestDto.getId(),jobRequestDto.getName())) {
-			return ResponseEntity.ok(new BaseResponse("error", "This jop already exist"));
+			return ResponseEntity.badRequest().body(new BaseResponse("error", "This job already exist"));
 		}
 		Job job = new Job();
 		BeanUtils.copyProperties(jobRequestDto, job);
-		Job savedJop = jobService.updateJop(job);
-		return ResponseEntity.ok(new BaseResponse("success", "jop update successfully"));
+		Job savedjob = jobService.updateJob(job);
+		return ResponseEntity.ok(new BaseResponse("success", "job update successfully"));
 	}
 	
-	@GetMapping(value = "/api/v1/jop")
-	public ResponseEntity<BaseResponse> getJops() {
-		List<Job> jobs = jobService.getAllJop();
+	@GetMapping(value = "/api/v1/job")
+	public ResponseEntity<BaseResponse> getjobs() {
+		List<Job> jobs = jobService.getAllJob();
 		List<JobResDto> responseDtos = new ArrayList<>();
 		for (Job job : jobs) {
 			JobResDto responseDto = new JobResDto();
 			BeanUtils.copyProperties(job, responseDto);
 			responseDtos.add(responseDto);
 		}
-		return ResponseEntity.ok(new CommenResponse<List<JobResDto>>("jops", responseDtos, "success",
-				"jops get successfully"));
+		return ResponseEntity.ok(new CommenResponse<List<JobResDto>>("jobs", responseDtos, "success",
+				"jobs get successfully"));
 	}
 	
-	@DeleteMapping(value = "/api/v1/jop/{id}")
-	public ResponseEntity<BaseResponse> deleteJop(@PathVariable Long id) {
-		if (!jobService.existJop(id)) {
-			return ResponseEntity.ok(new BaseResponse("error", "This jop not exist"));
+	@DeleteMapping(value = "/api/v1/job/{id}")
+	public ResponseEntity<BaseResponse> deletejob(@PathVariable Long id) {
+		if (!jobService.existJob(id)) {
+			return ResponseEntity.badRequest().body(new BaseResponse("error", "This job not exist"));
 		}
 		jobService.deleteById(id);
-		return ResponseEntity.ok(new BaseResponse("success", "jop deleted successfully"));
+		return ResponseEntity.ok(new BaseResponse("success", "job deleted successfully"));
 	}
+	
+	@GetMapping(value = "/api/v1/job/check-name/{name}")
+	public ResponseEntity<BaseResponse> isNameExist(@PathVariable String name) {
+		if (jobService.existJobByName(name)) {
+			return ResponseEntity.badRequest().body(new BaseResponse("error", "This job already exist"));
+		}
+		return ResponseEntity.ok(new BaseResponse("success", "true"));
+	}
+	
+	@GetMapping(value = "/api/v1/job/company/{id}")
+	public ResponseEntity<BaseResponse> getJobsByCompanyId(@PathVariable Long id) {
+		List<WorkplaceJob> jobs = jobService.getJobsByCompanyId(id);
+		List<JobTableResDto> responseDtos = new ArrayList<>();
+		for (WorkplaceJob job : jobs) {
+			JobTableResDto responseDto = new JobTableResDto();
+			responseDto.setId(job.getId());
+			responseDto.setName(job.getJob().getName());
+			responseDto.setJobId(job.getJob().getId());
+			responseDtos.add(responseDto);
+		}
+		return ResponseEntity.ok(new CommenResponse<List<JobTableResDto>>("jobs", responseDtos, "success",
+				"jobs get successfully"));
+	}
+	
 }
