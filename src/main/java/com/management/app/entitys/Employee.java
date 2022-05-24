@@ -29,5 +29,6 @@ public class Employee extends DateAudit{
 	private String address;
 	private String email;
 	private String device;
+	private String country;
 
 }

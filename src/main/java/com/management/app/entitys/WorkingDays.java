@@ -29,11 +29,11 @@ public class WorkingDays extends DateAudit {
 	private Date endDate;
 	@ManyToOne
 	@JoinColumn(name = "workplace_jop_id", nullable = false)
-	private WorkplaceJop workplaceAndJop;
+	private WorkplaceJob workplaceJop;
 	@ManyToOne
 	@JoinColumn(name = "employee_id", nullable = false)
 	private Employee employee;
 	@Enumerated(EnumType.STRING)
 	private JobStatus status;
-
+	private Double incomePerHours;
 }

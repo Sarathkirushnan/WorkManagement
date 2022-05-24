@@ -35,19 +35,21 @@ public class EmployeeController {
 			HttpServletRequest request) {
 		String device = request.getHeader("User-Agent");
 		if (employeeService.existByDevice(device)) {
-			return ResponseEntity.ok(new BaseResponse("error", "This device already have employee"));
+			return ResponseEntity.badRequest().body(new BaseResponse("error", "This device already have employee"));
 		}
 		if (employeeService.existByMobile(employeeDto.getMobileNumber())) {
-			return ResponseEntity.ok(new BaseResponse("error", "Employee mobile number already exist"));
+			return ResponseEntity.badRequest().body(new BaseResponse("error", "Employee mobile number already exist"));
 		}
 		if (employeeService.existByEmail(employeeDto.getEmail())) {
-			return ResponseEntity.ok(new BaseResponse("error", "Employee email id already exist"));
+			return ResponseEntity.badRequest().body(new BaseResponse("error", "Employee email id already exist"));
 		}
 		Employee employee = new Employee();
 		BeanUtils.copyProperties(employeeDto, employee);
 		employee.setDevice(device);
-		employeeService.saveEmployee(employee);
-		return ResponseEntity.ok(new BaseResponse("success", "Employee saved successfully"));
+		employee=employeeService.saveEmployee(employee);
+		EmployeeResDto responseDto = new EmployeeResDto();
+		BeanUtils.copyProperties(employee, responseDto);
+		return ResponseEntity.ok(new CommenResponse<EmployeeResDto>("employee",responseDto,"success", "Employee saved successfully"));
 	}
 
 	@GetMapping(value = "/api/v1/employee")
@@ -84,18 +86,36 @@ public class EmployeeController {
 			return ResponseEntity.badRequest().body(new BaseResponse("error", "Employee not fount"));
 		}
 		if (!employeeDb.get().getDevice().equals(device) && employeeService.existByDevice(device)) {
-			return ResponseEntity.ok(new BaseResponse("error", "This employee not using this device"));
+			return ResponseEntity.badRequest().body(new BaseResponse("error", "This employee not using this device"));
 		}
 		if (employeeService.existByUpdateMobile(employeeDto.getId(), employeeDto.getMobileNumber())) {
-			return ResponseEntity.ok(new BaseResponse("error", "Employee mobile number already exist"));
+			return ResponseEntity.badRequest().body(new BaseResponse("error", "Employee mobile number already exist"));
 		}
 		if (employeeService.existByUpdateEmail(employeeDto.getId(), employeeDto.getEmail())) {
-			return ResponseEntity.ok(new BaseResponse("error", "Employee email id already exist"));
+			return ResponseEntity.badRequest().body(new BaseResponse("error", "Employee email id already exist"));
 		}
 		Employee employee = new Employee();
 		BeanUtils.copyProperties(employeeDto, employee);
 		employee.setDevice(employeeDb.get().getDevice());
-		employeeService.saveEmployee(employee);
-		return ResponseEntity.ok(new BaseResponse("success", "Employee updated successfully"));
+		employee=employeeService.saveEmployee(employee);
+		EmployeeResDto responseDto = new EmployeeResDto();
+		BeanUtils.copyProperties(employee, responseDto);
+		return ResponseEntity.ok(new CommenResponse<EmployeeResDto>("employee",responseDto,"success", "Employee updated successfully"));
+	}
+	
+	@GetMapping(value = "/api/v1/employee/email/{email}")
+	public ResponseEntity<Object> getByEmployeEmail(@PathVariable String email,HttpServletRequest request) {
+		Optional<Employee> employee = employeeService.getByEmployeeEmail(email);
+		if (!employee.isPresent()) {
+			return ResponseEntity.badRequest().body(new BaseResponse("error", "User not fount"));
+		}
+		String device = request.getHeader("User-Agent");
+		if(!employee.get().getDevice().equals(device)){
+			return ResponseEntity.badRequest().body(new BaseResponse("error", "This user not velid for this device"));
+		}
+		EmployeeResDto responseDto = new EmployeeResDto();
+		BeanUtils.copyProperties(employee.get(), responseDto);
+		return ResponseEntity.ok(
+				new CommenResponse<EmployeeResDto>("employee", responseDto, "success", "Employee get successfully"));
 	}
 }

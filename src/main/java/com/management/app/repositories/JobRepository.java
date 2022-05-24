@@ -12,4 +12,6 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 
 	boolean existsByNameAndIdNot(String name, Long id);
 
+	boolean existsByNameIgnoreCase(String name);
+
 }

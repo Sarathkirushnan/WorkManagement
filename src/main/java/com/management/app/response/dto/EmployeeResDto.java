@@ -16,4 +16,5 @@ public class EmployeeResDto {
 	private String address;
 	private String email;
 	private String device;
+	private String country;
 }

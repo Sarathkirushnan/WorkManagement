@@ -17,8 +17,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private EmployeeRepository employeeRepository;
 
 	@Transactional
-	public void saveEmployee(Employee employee) {
-		employeeRepository.save(employee);
+	public Employee saveEmployee(Employee employee) {
+		return employeeRepository.save(employee);
 	}
 
 	@Transactional(readOnly = true)
@@ -61,4 +61,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeRepository.existsByDevice(device);
 	}
 
+	@Transactional(readOnly = true)
+	public Optional<Employee> getByEmployeeEmail(String email){
+		return employeeRepository.findByEmailIgnoreCase(email);
+	}
 }
